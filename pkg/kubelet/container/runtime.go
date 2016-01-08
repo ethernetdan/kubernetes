@@ -365,6 +365,15 @@ type PortMapping struct {
 	HostIP string
 }
 
+type Device struct {
+	// Path on host to be mounted
+	PathOnHost string
+	// Path of mount in container
+	PathInContainer string
+	// cgroup permissions for device
+	CgroupPermissions string
+}
+
 // RunContainerOptions specify the options which are necessary for running containers
 type RunContainerOptions struct {
 	// The environment variables list.

@@ -697,6 +697,13 @@ type VolumeMount struct {
 	MountPath string `json:"mountPath"`
 }
 
+// Device is a device mapping between the container and the host
+type Device struct {
+	PathOnHost        string `json:"pathOnHost"`
+	PathInContainer   string `json:"pathInContainer"`
+	CgroupPermissions string `json:"cgroupPermissions"`
+}
+
 // EnvVar represents an environment variable present in a Container.
 type EnvVar struct {
 	// Required: This must be a C_IDENTIFIER.
@@ -844,6 +851,7 @@ type Container struct {
 	// Compute resource requirements.
 	Resources      ResourceRequirements `json:"resources,omitempty"`
 	VolumeMounts   []VolumeMount        `json:"volumeMounts,omitempty"`
+	Devices        []Device             `json:"devices,omitempty"`
 	LivenessProbe  *Probe               `json:"livenessProbe,omitempty"`
 	ReadinessProbe *Probe               `json:"readinessProbe,omitempty"`
 	Lifecycle      *Lifecycle           `json:"lifecycle,omitempty"`

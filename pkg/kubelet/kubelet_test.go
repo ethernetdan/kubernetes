@@ -3870,6 +3870,50 @@ func TestMakePortMappings(t *testing.T) {
 	}
 }
 
+func TestMakeDevices(t *testing.T) {
+	tests := []struct {
+		container            *api.Container
+		expectedDevices []kubecontainer.Device
+	}{
+		{
+			&api.Container{
+				Name: "fooContainer",
+				Devices: []api.Device{
+					{
+						PathOnHost: "/dev/foodevicehost",
+						PathInContainer: "/dev/foodevicecontainer",
+						CgroupPermissions: "rwm",
+					},
+					{
+						PathOnHost: "/dev/nvidiactl",
+						PathInContainer: "/dev/nvidiactl",
+						CgroupPermissions: "rwm",
+					},
+				},
+			},
+			[]kubecontainer.Device{
+				{
+					PathOnHost: "/dev/foodevicehost",
+					PathInContainer: "/dev/foodevicecontainer",
+					CgroupPermissions: "rwm",
+				},
+				{
+					PathOnHost: "/dev/nvidiactl",
+					PathInContainer: "/dev/nvidiactl",
+					CgroupPermissions: "rwm",
+				},
+			},
+		},
+	}
+
+	for i, tt := range tests {
+		actual := makeDevices(tt.container)
+		if !reflect.DeepEqual(tt.expectedDevices, actual) {
+			t.Errorf("%d: Expected: %#v, saw: %#v", i, tt.expectedDevices, actual)
+		}
+	}
+}
+
 func TestIsPodPastActiveDeadline(t *testing.T) {
 	testKubelet := newTestKubelet(t)
 	kubelet := testKubelet.kubelet
